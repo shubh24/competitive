@@ -3,30 +3,37 @@ class Solution:
     # @param B : integer
     # @return a list of integers
     def slidingMaximum(self, A, B):
-        q = [A[0]]
-        arr = []
-        ptr = B-1
 
-        for i in range(min(len(A)-1,1), len(A), 1):
-            if ptr <= len(A)-1:
-                if len(q) > 0:
-                    m = q[0]
-                    if A[i] > m:
-                        m = A[i]
-                        q = [m]*B
-                    else:
-                        q.append(A[i])    
+        res = []
+        arr = A[:B]
+        max_num = max(arr)
+        if len(A) > 1:
+            res.append(max(A[0], A[1]))
+        else:
+            res.append(A[0])
+            return res
+
+        if B > len(A):
+            return [max(A)]
+
+        for start in range(1, len(A) - B +1):
+            #arr = A[start:start+B]
+            if arr[0] != max_num:
+                del arr[0]
+
+                arr.append(A[start+B-1])
+                if A[start+B-1] > max_num:
+                    max_num = A[start+B-1]
                 else:
-                    m = A[i]
-                    q = [m]
-                ans = q[0]   
-                q.remove(ans)
-                arr.append(ans)
-                ptr += 1
-            else:
-                break
-        if B == 1 and len(A) != 1 and len(q) > 0:
-            arr.append(q[0])
-        return arr
+                    pass    
+            if arr[0] == max_num:
+                del arr[0]
+                max_num = -1
+                arr.append(A[start+B-1])
+                max_num = max(arr)
 
-print Solution().slidingMaximum( [ 105, 420, 569, 534, 912, 145, 566, 462, 51, 34, 671, 487, 627, 475, 647, 221, 145, 966, 612, 685, 786, 982, 834, 433, 979, 158, 221, 641, 435, 631, 664, 10, 815, 86, 338, 822, 450, 747, 598, 599, 6, 652, 829, 547, 604, 699, 44, 141, 427, 957, 221, 816, 952, 716, 337, 950, 889, 510, 492, 550, 726, 396, 218, 939, 220, 923, 380, 197, 209, 52, 194, 753, 539, 465, 987, 975, 731, 776, 385, 209, 969, 993, 518, 237, 47, 130 ], 1)
+            res.append(max_num)
+
+        return res
+
+print Solution().slidingMaximum( [ 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 ],2)
